@@ -1,0 +1,28 @@
+# Environment
+.env
+
+# Build output
+bin/
+dist/
+
+# Temporary files
+tmp/
+coverage.out
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+vendor/
+
+# Generated Swagger docs (optional)
+#docs/swagger.json
+#docs/swagger.yaml
