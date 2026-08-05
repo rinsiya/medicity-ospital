@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <header class="page-header">
+        <h2 class="site-title">Admin Dashboard</h2>
+        <div class="top-menu"> <a href="/admin/dashboard">Dashboard<i class="fa-solid fa-up-right-from-square"></i></a>
+            <a href="/admin/create">Create user</a>
+            <form class="search-block" action="/admin/dashboard" method="GET"
+                style="display: flex; gap: 0px;width: 40%;">
+                <input type="text" placeholder="Search by name or email" id="searchInput" name="search">
+                <button class="bt-edit-search" type="submit" name="search">search</button>
+                <button class="bt-editt" type="submit" name="clear" style="margin-left: 10px;">clear</button>
+
+            </form>
+
+            <a href="/logout"><button class="bt-logout">Logout<i
+                        class="fa-solid fa-right-from-bracket"></i></button></a>
+        </div>
+    </header>
+    <main class="main-container">
+        <h2 class="login-head">User Details</h2>
+        <table class="user-table">
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+
+            {{range .users}}
+
+            <tr onclick="window.location='/admin/editUsers/{{.ID}}'" style="cursor:pointer;">
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Email}}</td>
+                <td>{{.Role}}</td>
+            </tr>
+
+            {{end}}
+
+        </table>
+        <div class="error" style="font-size: 2em;color: red;">{{.empty}}</div>
+    </main>
+    <footer class="page-footer">
+        <hr class="footer-line">
+        <p>&copy; 2023 . All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
