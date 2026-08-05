@@ -21,7 +21,10 @@ func main() {
 	//connect DB
 	database.ConnectDatabase(confg)
 
-
+	// Run migrations
+    if err := database.MigrateDatabase(); err != nil {
+        panic(err)
+    }
 	fmt.Println(confg.AppName)
 	fmt.Println(confg.Port)
 
