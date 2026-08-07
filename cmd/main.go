@@ -4,8 +4,16 @@ import (
 	"fmt"
 	"log"
 	"medicity/config"
-	"medicity/internal/database"
-	"medicity/internal/logger"
+	"medicity/database"
+	"medicity/logger"
+
+	//"medicity/pkg/utils"
+	"medicity/routes"
+	//"time"
+
+	ginzap "github.com/gin-contrib/zap"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -22,10 +30,28 @@ func main() {
 	database.ConnectDatabase(confg)
 
 	// Run migrations
-    if err := database.MigrateDatabase(); err != nil {
-        panic(err)
-    }
-	fmt.Println(confg.AppName)
-	fmt.Println(confg.Port)
+	if err := database.MigrateDatabase(); err != nil {
+		panic(err)
+	}
+
+	// jwtUtil := utils.NewJWT(
+	// 	confg.JWTSecret,
+	// 	24*time.Hour,
+	// )
+
+
+	r := gin.New()
+	r.Use(ginzap.RecoveryWithZap(logger.Log, true))
+
+	//load HTML templates
+	r.LoadHTMLGlob("../templates/*")
+	//load static files
+	r.Static("/static", "../static")
+
+	routes.SetupRoutes(r)
+	logger.Log.Info("Server started", zap.String("port", confg.Port))
+	//Run server
+	fmt.Println("Server started on port", confg.Port)
+	r.Run(":" + confg.Port)
 
 }
