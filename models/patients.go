@@ -26,11 +26,4 @@ type Patient struct {
 
 	// ProfilePhoto *File `gorm:"foreignKey:ProfilePhotoID;references:FileID"`
 
-	// Address *Address `gorm:"foreignKey:PatientID"`
-
-	// Appointments []Appointment `gorm:"foreignKey:PatientID"`
-
-	// VitalData []VitalData `gorm:"foreignKey:PatientID"`
-
-	// Reviews []DoctorReview `gorm:"foreignKey:PatientID"`
-}
+	}

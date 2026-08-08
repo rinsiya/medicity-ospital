@@ -15,5 +15,5 @@ type VitalData struct {
 
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 
-	//Patient Patient `gorm:"foreignKey:PatientID;references:PatientID"`
+	// Patient Patient `gorm:"foreignKey:PatientID;references:PatientID"`
 }

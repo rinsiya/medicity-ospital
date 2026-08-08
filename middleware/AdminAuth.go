@@ -5,10 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
 func AdminOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userType := c.GetHeader("User-Type")
-		if userType != "admin" {
+		role, exists := c.Get("role")
+		if !exists || role != "admin" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
 			return
@@ -19,8 +20,8 @@ func AdminOnly() gin.HandlerFunc {
 
 func AdminDashboard() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userType := c.GetHeader("User-Type")
-		if userType != "admin" {
+		role, exists := c.Get("role")
+		if !exists || role != "admin" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
 			return

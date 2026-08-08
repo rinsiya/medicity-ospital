@@ -17,5 +17,5 @@ type Wallet struct {
 
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 
-	//Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
+	// Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
 }

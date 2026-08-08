@@ -1,6 +1,5 @@
 package models
 
-
 type VerificationStatus string
 
 const (
@@ -24,23 +23,7 @@ type Doctor struct {
 
 	VerificationStatus VerificationStatus `gorm:"type:varchar(20);not null;default:'pending'"`
 
-	User User `gorm:"foreignKey:UserID;references:UserID"`
+	// User User `gorm:"foreignKey:UserID;references:UserID"`
 
-	Department Department `gorm:"foreignKey:DepartmentID;references:DepartmentID"`
-
-	Profile *DoctorProfile `gorm:"foreignKey:DoctorID"`
-
-	Qualifications []DoctorQualification `gorm:"foreignKey:DoctorID"`
-
-	TimeSlots []DoctorTimeSlot `gorm:"foreignKey:DoctorID"`
-
-	Appointments []Appointment `gorm:"foreignKey:DoctorID"`
-
-	Reviews []DoctorReview `gorm:"foreignKey:DoctorID"`
-
-	Wallet *Wallet `gorm:"foreignKey:DoctorID"`
-
-	BankAccount *BankAccount `gorm:"foreignKey:DoctorID"`
-
-	Withdrawals []Withdrawal `gorm:"foreignKey:DoctorID"`
+	// Department Department `gorm:"foreignKey:DepartmentID;references:DepartmentID"`
 }

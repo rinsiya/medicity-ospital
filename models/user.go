@@ -39,16 +39,4 @@ type User struct {
 
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 
-	
-	// Patient *Patient `gorm:"foreignKey:UserID;references:UserID"`
-
-	// Doctor *Doctor `gorm:"foreignKey:UserID;references:UserID"`
-
-	// Files []File `gorm:"foreignKey:UserID"`
-
-	// Notifications []Notification `gorm:"foreignKey:UserID"`
-
-	SentMessages []Message `gorm:"foreignKey:SenderID"`
-
-	ReceivedMessages []Message `gorm:"foreignKey:ReceiverID"`
 }

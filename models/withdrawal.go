@@ -28,7 +28,7 @@ type Withdrawal struct {
 
 	ProcessedAt *time.Time
 
-	 //Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
+	//  Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
 
-	 //Account BankAccount `gorm:"foreignKey:AccountID;references:AccountID"`
+	//  Account BankAccount `gorm:"foreignKey:AccountID;references:AccountID"`
 }

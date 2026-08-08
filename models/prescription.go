@@ -25,5 +25,5 @@ type Prescription struct {
 
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 
-//	Appointment Appointment `gorm:"foreignKey:AppointmentID;references:AppointmentID"`
+  	// Appointment Appointment `gorm:"foreignKey:AppointmentID;references:AppointmentID"`
 }

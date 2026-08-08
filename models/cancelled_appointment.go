@@ -27,5 +27,5 @@ type CancelledAppointment struct {
 
 	RefundStatus RefundStatus `gorm:"type:varchar(20);not null;default:'pending'"`
 
-//	Appointment Appointment `gorm:"foreignKey:AppointmentID;references:AppointmentID"`
+//Appointment Appointment `gorm:"foreignKey:AppointmentID;references:AppointmentID"`
 }

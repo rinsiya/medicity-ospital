@@ -8,36 +8,18 @@ import (
 )
 
 func MigrateDatabase() error {
-		logger.Log.Info("Database migration initialized")
+	logger.Log.Info("Database migration initialized")
 
 	err := DB.AutoMigrate(
-
 		&models.User{},
-		// &models.Doctor{},
-
-		// &models.Department{},
-		
-		// &models.Patient{},
-
-		// &models.Address{},
-
-		// &models.File{},
-		// &models.DoctorProfile{},
-		// &models.DoctorQualification{},
-		// &models.DoctorTimeSlot{},
-		// &models.BankAccount{},
-		// &models.Wallet{},
-
-	// 	&models.Appointment{},
-	// 	&models.CancelledAppointment{},
-	// 	&models.Prescription{},
-	// 	&models.VitalData{},
+		&models.Patient{},
+		&models.Department{},
+		&models.Doctor{},
+		&models.Wallet{},
+		&models.Appointment{},
+		&models.Prescription{},
+		&models.DoctorReview{},
 		&models.Message{},
-	// 	&models.DoctorReview{},
-	// 	&models.Payment{},
-	// 	&models.Refund{},
-	// 	&models.Withdrawal{}, 
-	// &models.Notification{},
 	)
 
 	if err != nil {

@@ -28,7 +28,7 @@ type DoctorTimeSlot struct {
 
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 
-	// Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
+	//Doctor Doctor `gorm:"foreignKey:DoctorID;references:DoctorID"`
 
 	// Appointment *Appointment `gorm:"foreignKey:SlotID"`
 }

@@ -43,5 +43,4 @@ type Payment struct {
 
 	//Appointment Appointment `gorm:"foreignKey:AppointmentID;references:AppointmentID"`
 
-	//Refund *Refund `gorm:"foreignKey:PaymentID"`
-}
+	}

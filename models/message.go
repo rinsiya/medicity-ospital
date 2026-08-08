@@ -15,7 +15,7 @@ type Message struct {
 
 	ReadAt *time.Time
 
-	//Sender User `gorm:"foreignKey:SenderID;references:UserID"`
+	// Sender User `gorm:"foreignKey:SenderID;references:UserID"`
 
-	// Receiver User `gorm:"foreignKey:ReceiverID;references:UserID"`
+//	Receiver User `gorm:"foreignKey:ReceiverID;references:UserID"`
 }

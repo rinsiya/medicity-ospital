@@ -28,5 +28,5 @@ type Refund struct {
 
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 
-	//Payment Payment `gorm:"foreignKey:PaymentID;references:PaymentID"`
+	// Payment Payment `gorm:"foreignKey:PaymentID;references:PaymentID"`
 }
