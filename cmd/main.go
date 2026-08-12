@@ -8,7 +8,7 @@ import (
 	"medicity/logger"
 
 	//"medicity/pkg/utils"
-	"medicity/routes"
+	"medicity/internal/routes"
 	//"time"
 
 	ginzap "github.com/gin-contrib/zap"
@@ -33,12 +33,6 @@ func main() {
 	if err := database.MigrateDatabase(); err != nil {
 		panic(err)
 	}
-
-	// jwtUtil := utils.NewJWT(
-	// 	confg.JWTSecret,
-	// 	24*time.Hour,
-	// )
-
 
 	r := gin.New()
 	r.Use(ginzap.RecoveryWithZap(logger.Log, true))

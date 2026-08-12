@@ -20,8 +20,10 @@
   <div class="login-card">
     <h2>Administrator Login</h2>
     <p>Enter your credentials to access the MediCity dashboard.</p>
-
-    <form>
+{{if .error}}
+        <div class="error" style="color: brown;">{{.error}}</div>
+        {{end}}
+    <form action="/admin/login" method="POST">
       <label>User ID / Clinical Email</label>
       <input type="email" placeholder="admin@medicity.health">
 

@@ -2,7 +2,7 @@ package database
 
 import (
 	"medicity/logger"
-	"medicity/models"
+	"medicity/internal/models"
 
 	"go.uber.org/zap"
 )
@@ -13,31 +13,31 @@ func MigrateDatabase() error {
 	err := DB.AutoMigrate(
 
 		&models.User{},
-		// &models.Doctor{},
+		&models.Doctor{},
 
-		// &models.Department{},
+		&models.Department{},
 		
-		// &models.Patient{},
+		&models.Patient{},
 
-		// &models.Address{},
+		&models.Address{},
 
-		// &models.File{},
-		// &models.DoctorProfile{},
-		// &models.DoctorQualification{},
-		// &models.DoctorTimeSlot{},
-		// &models.BankAccount{},
-		// &models.Wallet{},
-
-	// 	&models.Appointment{},
-	// 	&models.CancelledAppointment{},
-	// 	&models.Prescription{},
-	// 	&models.VitalData{},
+		&models.File{},
+		&models.DoctorProfile{},
+		&models.DoctorQualification{},
+		&models.DoctorTimeSlot{},
+		&models.BankAccount{},
+		&models.Wallet{},
+        &models.PendingUserSignup{},
+		&models.Appointment{},
+		&models.CancelledAppointment{},
+		&models.Prescription{},
+		&models.VitalData{},
 		&models.Message{},
-	// 	&models.DoctorReview{},
-	// 	&models.Payment{},
-	// 	&models.Refund{},
-	// 	&models.Withdrawal{}, 
-	// &models.Notification{},
+		&models.DoctorReview{},
+		&models.Payment{},
+		&models.Refund{},
+		&models.Withdrawal{}, 
+	&models.Notification{},
 	)
 
 	if err != nil {

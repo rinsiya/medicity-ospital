@@ -2,14 +2,11 @@ package utils
 
 import "golang.org/x/crypto/bcrypt"
 
-const DefaultCost = bcrypt.DefaultCost
-
-// HashPassword hashes a plain text password.
+// HashPassword hashes a plain-text password.
 func HashPassword(password string) (string, error) {
-
 	hashedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(password),
-		DefaultCost,
+		bcrypt.DefaultCost,
 	)
 
 	if err != nil {
@@ -19,10 +16,12 @@ func HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-// CheckPassword compares a hashed password with a plain text password.
-func CheckPassword(hashedPassword, password string) error {
-	return bcrypt.CompareHashAndPassword(
+// CheckPassword compares a plain-text password with a hashed password.
+func CheckPassword(password, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword(
 		[]byte(hashedPassword),
 		[]byte(password),
 	)
+
+	return err == nil
 }
