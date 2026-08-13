@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit user</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .bt-logout,
+        .bt-edit {
+            width: 100%;
+            color: #000000;
+            padding: 8px;
+            background-color: #ffffff;
+            border: 1px solid #bd0000;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 1px 0 5px rgba(255, 0, 0, 0.5);
+            transition: 0.3s all ease;
+        }
+
+        .bt-logout:hover,
+        .bt-edit:hover {
+            padding: 12px;
+            border-color: #ff0000;
+            background-color: #8e3636;
+            color: #fff;
+            box-shadow: 2px 1px 5px rgba(255, 0, 0, 0.7);
+        }
+
+        .edit-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .edit-btns a {
+            width: 12vw;
+        }
+
+        i.fa-solid {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="page-header">
+        <h2 class="site-title">Admin Dashboard</h2>
+        <div class="top-menu"> <a href="/admin/dashboard">Dashboard<i class="fa-solid fa-up-right-from-square"></i></a>
+            <a href="/admin/create">Create user</a>
+            <form class="search-block" action="/admin/dashboard" method="GET"
+                style="display: flex; gap: 10px;width: 40%;">
+                <input type="text" placeholder="Search by name or email" id="searchInput" name="search">
+                <button class="bt-edit" type="submit" name="search">search</button>
+                <button class="bt-edit" type="submit" name="clear">clear</button>
+
+            </form>
+
+            <a href="/logout"><button class="bt-logout">Logout<i
+                        class="fa-solid fa-right-from-bracket"></i></button></a>
+        </div>
+    </header>
+    <main class="main-container">
+        <h2 class="login-head">User Details</h2>
+        <table class="user-table" style="width:60%">
+            <tr>
+                <th>ID</th>
+                <td>{{.users.ID}}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{.users.Name}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{.users.Email}}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{.users.Role}}</td>
+            </tr>
+
+        </table>
+        <div class="edit-btns">
+            <a href="/admin/deleteUser/{{.users.ID}}"
+                onclick="return confirm('Are you sure you want to delete this user?');">
+                <button class="bt-edit">Delete User</button></a>
+            {{if eq .users.Role "user"}}
+            <a href="/admin/editRole/{{.users.ID}}/{{.users.Role}}"
+                onclick="return confirm('Are you sure you want to set this user as admin?');">
+                <button class="bt-edit">Set Role as Admin</button>
+            </a>
+            {{else if eq .users.Role "admin"}}
+            <a href="/admin/editRole/{{.users.ID}}/{{.users.Role}}"
+                onclick="return confirm('Are you sure you want to set this admin as only user?');">
+                <button class="bt-edit">Set Role as User</button>
+            </a>
+            {{end}}
+        </div>
+    </main>
+    <footer class="page-footer">
+        <hr class="footer-line">
+        <p>&copy; 2023 . All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

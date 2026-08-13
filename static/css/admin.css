@@ -1,0 +1,22 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#eef3f8;min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:58px;background:#fff;border-bottom:1px solid #d9e1ea;display:flex;align-items:center;padding:0 24px}
+.brand{font-weight:700;color:#173d8f}
+.plus{color:#0c8b3c;font-size:24px;margin-right:2px}
+.divider{width:1px;height:26px;background:#d9d9d9;margin:0 16px}
+.title{color:#35516f;font-weight:500}
+main{flex:1;display:flex;justify-content:center;align-items:center;padding:30px}
+.login-card{width:400px;background:#fff;padding:34px;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.login-card h2{text-align:center;color:#1d4f89;margin-bottom:8px;font-size:28px}
+.login-card p{text-align:center;color:#6c7b8a;font-size:14px;margin-bottom:24px}
+label{display:block;margin:14px 0 6px;font-size:13px;font-weight:600;color:#555}
+input{width:100%;padding:12px;border:1px solid #cfd7e2;border-radius:4px;background:#f7f9fc}
+input:focus{outline:none;border-color:#1d4f89}
+button{margin-top:20px;width:100%;padding:13px;background:#1f5a96;color:#fff;border:none;border-radius:4px;font-size:15px;font-weight:600;cursor:pointer}
+button:hover{background:#184a7b}
+footer{background:#f8fbfd;border-top:1px solid #d9e1ea;color:#3d8c7c;font-size:12px;padding:14px 20px}
+@media(max-width:500px){
+.topbar{padding:0 12px}
+.login-card{width:100%;padding:24px}
+.login-card h2{font-size:24px}
+}
