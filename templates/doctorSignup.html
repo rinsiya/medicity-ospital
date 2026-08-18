@@ -2,79 +2,326 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MediCity Register</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/register.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCity Signup</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .error-message {
+            display: block;
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .input-error {
+            border: 1px solid #dc3545 !important;
+        }
+
+        .terms .error-message {
+            margin-left: 5px;
+        }
+    </style>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Public+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
-
 <body>
-  <header class="topbar"></header>
 
-  <section class="logo-area">
-    <div class="logo"><span>+</span>Medi<span class="blue">City</span></div>
-  </section>
+ <header>
+        <div class="top-bar">
+        <a href="/doctor/login">
 
-  <section class="hero">
-    <h1>Modernizing healthcare management systems.</h1>
-    <p>Empowering medical professionals with intelligent workflows and secure data architecture.
-      Medicity is the foundation for next-generation patient care.</p>
-  </section>
-
-  <section class="card">
-    <h2>Create Account</h2>
-    <p>Join the Medicity professional network today.</p>
-{{if .error}}
-        <div class="error" style="color: brown;">{{.error}}</div>
-        {{end}}
-    <form method="post" action="/doctor/signup">
-      <div class="grid">
-        <div class="field">
-          <label>FIRST NAME *</label>
-          <input type="text" placeholder="Enter your full name" name="firstName" id="firstName">
+            <button class="signup-btn">Sign In</button></a>
         </div>
 
-        <div class="field">
-          <label>LAST NAME *</label>
-          <input type="text" placeholder="Enter your full name" name="lastName" id="lastName">
+        <div class="logo-bar">
+            <h1>
+                <span class="green">+</span>
+                <span class="green">Medi</span><span class="blue">City</span>
+            </h1>
         </div>
 
-        <div class="field">
-          <label>PHONE *</label>
-          <input type="tel" placeholder="Enter your phone" name="phone" id="phone">
+    </header>
+
+    <main>
+
+        <section class="register-hero">
+
+            <div class="hero-content">
+ <h1>Welcome to MediCity - The Modern healthcare management system.</h1>
+
+        <p>Empowering medical professionals with intelligent workflows and secure data architecture.
+            Medicity is the foundation for next-generation patient care.</p>
+   </div> </section>
+
+    <section class="register-container">
+
+        <div class="register-card">
+
+            <div class="card-heading">
+
+                <h2>Create Account</h2>
+
+                <p>Join the Medicity Health care network today.</p>
+
+            </div>
+            {{if .error}}
+            <div class="error" style="color: brown;">{{.error}}</div>
+            {{end}}
+            <form id="doctorSignupForm" method="post" action="/signup/doctor">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="firstName">FIRST NAME <span>*</span></label>
+                        <input type="text" id="firstName" name="first_name" placeholder="Enter your first name">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">LAST NAME <span>*</span></label>
+                        <input type="text" id="lastName" name="last_name" placeholder="Enter your last name">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">PHONE <span>*</span></label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">EMAIL ADDRESS <span>*</span></label>
+                        <input type="email" id="email" name="email" placeholder="name@example.com">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group password">
+
+                        <label for="password">SECURITY PASSWORD <span>*</span></label>
+
+                        <div class="password-box">
+                            <input type="password" id="password" name="password" placeholder="••••••••">
+
+                            <i class="fa-regular fa-eye"></i>
+                        </div>
+
+                        <small class="error-message"></small>
+
+                    </div>
+
+                    <div class="form-group password">
+
+                        <label for="confirmPassword">CONFIRM PASSWORD <span>*</span></label>
+
+                        <div class="password-box">
+                            <input type="password" id="confirmPassword" name="confirm_password" placeholder="••••••••">
+
+                            <i class="fa-regular fa-eye"></i>
+                        </div>
+
+                        <small class="error-message"></small>
+
+                    </div>
+
+                </div>
+
+                <div class="terms">
+
+                    <input type="checkbox" id="terms" name="terms">
+
+                    <label for="terms">
+                        I agree to the
+                        <a href="#">Terms of Practice</a>
+                        and
+                        <a href="#">Privacy Protocols</a>
+                    </label>
+
+                    <small class="error-message"></small>
+
+                </div>
+
+                <button type="submit" class="create-btn">
+                    CREATE ACCOUNT
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+            </form>
         </div>
 
-        <div class="field">
-          <label>EMAIL ADDRESS</label>
-          <input type="email" placeholder="dr.name@hospital.org" name="email" id="email">
-        </div>
+    </section>
 
-        <div class="field">
-          <label>SECURITY PASSWORD *</label>
-          <input type="password" placeholder="••••••••" name="password" id="password">
-        </div>
 
-        <div class="field">
-          <label>CONFIRM PASSWORD *</label>
-          <input type="password" placeholder="••••••••" name="confirm_password" id="confirm_password">
-        </div>
-      </div>
+    </main>
 
-      <div class="terms">
-        <input type="checkbox">
-        <span>I agree to the Terms of Practice and Privacy Protocols.</span>
-      </div>
+    <footer>
 
-      <button type="submit">Create Account →</button>
-    </form>
-  </section>
+        © 2026 MediCity Hospital. All Rights Reserved.
 
-  <footer>
-    © 2026 MediCity Hospital. All Rights Reserved.
-  </footer>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
+            const form = document.getElementById("doctorSignupForm");
+
+            const firstName = document.getElementById("firstName");
+            const lastName = document.getElementById("lastName");
+            const phone = document.getElementById("phone");
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const confirmPassword = document.getElementById("confirmPassword");
+            const terms = document.getElementById("terms");
+
+            form.addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                let isValid = true;
+
+                // Clear previous errors
+                document.querySelectorAll(".error-message").forEach(function (error) {
+                    error.textContent = "";
+                });
+
+                document.querySelectorAll("input").forEach(function (input) {
+                    input.classList.remove("input-error");
+                });
+
+                // Name validation
+                const namePattern = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/;
+
+                if (firstName.value.trim() === "") {
+                    showError(firstName, "First name is required.");
+                    isValid = false;
+                } else if (!namePattern.test(firstName.value.trim())) {
+                    showError(firstName, "Enter a valid first name.");
+                    isValid = false;
+                }
+
+                if (lastName.value.trim() === "") {
+                    showError(lastName, "Last name is required.");
+                    isValid = false;
+                } else if (!namePattern.test(lastName.value.trim())) {
+                    showError(lastName, "Enter a valid last name.");
+                    isValid = false;
+                }
+
+                // Phone validation
+                const phonePattern = /^[6-9]\d{9}$/;
+                const phoneValue = phone.value.trim();
+
+                if (phoneValue === "") {
+                    showError(phone, "Phone number is required.");
+                    isValid = false;
+                } else if (!phonePattern.test(phoneValue)) {
+                    showError(phone, "Enter a valid 10-digit phone number.");
+                    isValid = false;
+                }
+
+                // Email validation
+                const emailPattern =
+                    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+                const emailValue = email.value.trim();
+
+                if (emailValue === "") {
+                    showError(email, "Email address is required.");
+                    isValid = false;
+                } else if (!emailPattern.test(emailValue)) {
+                    showError(email, "Enter a valid email address.");
+                    isValid = false;
+                }
+
+                // Password validation
+                const passwordValue = password.value;
+
+                if (passwordValue === "") {
+                    showError(password, "Password is required.");
+                    isValid = false;
+                } else if (passwordValue.length < 8) {
+                    showError(password, "Password must contain at least 8 characters.");
+                    isValid = false;
+                } else if (!/[A-Z]/.test(passwordValue)) {
+                    showError(password, "Password must contain at least one uppercase letter.");
+                    isValid = false;
+                } else if (!/[a-z]/.test(passwordValue)) {
+                    showError(password, "Password must contain at least one lowercase letter.");
+                    isValid = false;
+                } else if (!/[0-9]/.test(passwordValue)) {
+                    showError(password, "Password must contain at least one number.");
+                    isValid = false;
+                }
+
+                // Confirm password
+                if (confirmPassword.value === "") {
+                    showError(confirmPassword, "Please confirm your password.");
+                    isValid = false;
+                } else if (passwordValue !== confirmPassword.value) {
+                    showError(confirmPassword, "Passwords do not match.");
+                    isValid = false;
+                }
+
+                // Terms checkbox
+                if (!terms.checked) {
+                    const error = terms
+                        .closest(".terms")
+                        .querySelector(".error-message");
+
+                    error.textContent = "You must agree to the Terms and Privacy Protocols.";
+                    isValid = false;
+                }
+
+                // Submit only if everything is valid
+                if (isValid) {
+                    form.submit();
+                }
+            });
+
+
+            // Display validation error
+            function showError(input, message) {
+
+                input.classList.add("input-error");
+
+                const formGroup = input.closest(".form-group");
+
+                const error = formGroup.querySelector(".error-message");
+
+                error.textContent = message;
+            }
+
+
+            // Password show/hide
+            document.querySelectorAll(".password-box i").forEach(function (icon) {
+
+                icon.addEventListener("click", function () {
+
+                    const input = this.parentElement.querySelector("input");
+
+                    if (input.type === "password") {
+
+                        input.type = "text";
+
+                        this.classList.remove("fa-eye");
+                        this.classList.add("fa-eye-slash");
+
+                    } else {
+
+                        input.type = "password";
+
+                        this.classList.remove("fa-eye-slash");
+                        this.classList.add("fa-eye");
+                    }
+                });
+            });
+
+        });
+    </script>
 </body>
 
 </html>

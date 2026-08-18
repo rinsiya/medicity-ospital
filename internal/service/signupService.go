@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"medicity/database"
 	"medicity/internal/dto"
 	"medicity/internal/models"
 	"medicity/internal/repository"
@@ -12,145 +13,129 @@ import (
 	"medicity/pkg/utils"
 
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 var (
-	ErrEmailAlreadyExists = errors.New("email already registered")
-	ErrPhoneAlreadyExists = errors.New("phone already registered")
+	ErrEmailAndPhoneAlreadyExists       = errors.New("email and phone already registered")
+	ErrPhoneAlreadyExists       = errors.New("phone already registered")
+	ErrEmailOrPhoneAlreadyExists       = errors.New("email or phone already registered. Check the data entered carefully and try to login")
+ErrEmailAndPhoneMismatch   = errors.New("Email Or phone registered ")
+	ErrPhonePendingVerification = errors.New("phone has pending verification")
 )
 
 type SignupService interface {
-	Signup(input *dto.SignupInput, role models.UserRole) error
-	
+	Signup(input *dto.SignupInput, role models.UserRole) (string,error)
+	ResendOTP(phone string) error
+	GenerateAndSendOTP(phone string) (error)
+	ValidateOTP(phone, otp string)(time.Time,error)
+	CreateUser(phone string) (*models.User,error)
+	FindPendingUserByPhone(phone string)(*models.PendingUserSignup,error)
+	UpdatePhone(oldPhone string,newPhone string) (models.UserRole,string,error)
+	VerifyOTPAndCreateUser(phone string,otp string) (time.Time, error)
+
 }
 
 type signupService struct {
 	pendingUserRepo repository.PendingUserSignupRepository
 	userRepo        repository.UserRepository
+	patientRepo     repository.PatientRepository
+	doctorRepo      repository.DoctorRepository
 }
 
-func NewSignupService(
-	pendingUserRepo repository.PendingUserSignupRepository,
-	userRepo repository.UserRepository,
-) SignupService {
+func NewSignupService(pendingUserRepo repository.PendingUserSignupRepository, userRepo repository.UserRepository, patientRepo repository.PatientRepository,
+	doctorRepo repository.DoctorRepository) SignupService {
 	return &signupService{
 		pendingUserRepo: pendingUserRepo,
 		userRepo:        userRepo,
+		patientRepo:     patientRepo,
+		doctorRepo:      doctorRepo,
 	}
 }
 
-func (s *signupService) Signup(
-	input *dto.SignupInput,
-	role models.UserRole,
-) error {
+func (s *signupService) Signup(input *dto.SignupInput, role models.UserRole) (string,error) {
 
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 	phone := strings.TrimSpace(input.Phone)
 
-	logger.Log.Info(
-		"Signup service started",
+	logger.Log.Info("Signup service started",
 		zap.String("role", string(role)),
 		zap.String("email", email),
 	)
 
 	// Check existing user by email
 
-	user, err := s.userRepo.FindByEmail(email)
+	user, err := s.userRepo.FindByEmailOrPhone(email,phone)
 	if err != nil {
-
 		logger.Log.Error(
-			"Failed to check existing user by email",
+			"Failed to check email and phone existence",
 			zap.String("email", email),
+			zap.String("phone", phone),
 			zap.Error(err),
 		)
-
-		return err
+		return phone,err
 	}
-
-	if user != nil {
-
-		logger.Log.Warn(
-			"Signup rejected: email already registered",
+	if user!=nil {
+				logger.Log.Warn(
+			"Signup rejected: email or phone already registered.",
 			zap.String("email", email),
+			zap.String("phone", phone),
 			zap.String("role", string(role)),
 		)
+if user.Phone ==phone {
+	if user.Email==email{
+		return user.Phone,ErrEmailAndPhoneAlreadyExists
+	}
+			return user.Phone,ErrEmailOrPhoneAlreadyExists
 
-		return ErrEmailAlreadyExists
+}
+if user.Email==email{
+			return user.Phone,ErrEmailOrPhoneAlreadyExists
+
+}
+
+
+		return user.Phone,ErrEmailAndPhoneAlreadyExists
 	}
 
-	// Check existing user by phone
-	
-	user, err = s.userRepo.FindByPhone(phone)
+	//Check pending signup by email
+
+	pendingUser, err := s.pendingUserRepo.FindByEmailOrPhone(email,phone)
 	if err != nil {
 
 		logger.Log.Error(
-			"Failed to check existing user by phone",
+			"Failed to check pending signup by email and phone",
+			zap.String("email", email),
 			zap.String("phone", phone),
 			zap.Error(err),
 		)
 
-		return err
-	}
-
-	if user != nil {
-
-		logger.Log.Warn(
-			"Signup rejected: phone already registered",
-			zap.String("phone", phone),
-			zap.String("role", string(role)),
-		)
-
-		return ErrPhoneAlreadyExists
-	}
-
-	// Check pending signup by email
-
-	pendingUser, err := s.pendingUserRepo.FindByEmail(email)
-	if err != nil {
-
-		logger.Log.Error(
-			"Failed to check pending signup by email",
-			zap.String("email", email),
-			zap.Error(err),
-		)
-
-		return err
+		return phone,err
 	}
 
 	if pendingUser != nil {
-
-		logger.Log.Warn(
-			"Signup rejected: email has pending verification",
+						logger.Log.Warn(
+			"Signup rejected: email or phone already registered.",
 			zap.String("email", email),
-			zap.String("role", string(role)),
-		)
-
-		return ErrEmailAlreadyExists
-	}
-
-	// Check pending signup by phone
-
-	pendingUser, err = s.pendingUserRepo.FindByPhone(phone)
-	if err != nil {
-
-		logger.Log.Error(
-			"Failed to check pending signup by phone",
-			zap.String("phone", phone),
-			zap.Error(err),
-		)
-
-		return err
-	}
-
-	if pendingUser != nil {
-
-		logger.Log.Warn(
-			"Signup rejected: phone has pending verification",
 			zap.String("phone", phone),
 			zap.String("role", string(role)),
 		)
+if pendingUser.Phone ==phone {
+	if pendingUser.Email==email{
+		return pendingUser.Phone,ErrPhonePendingVerification
+	}
+			return pendingUser.Phone,ErrEmailAndPhoneMismatch
 
-		return ErrPhoneAlreadyExists
+}
+if pendingUser.Email==email{
+			return pendingUser.Phone,ErrEmailAndPhoneMismatch
+
+}
+
+
+	//	return pendingUser.Phone,ErrEmailAndPhoneAlreadyExists
+
 	}
 
 	// Hash password
@@ -163,21 +148,20 @@ func (s *signupService) Signup(
 			zap.Error(err),
 		)
 
-		return err
+		return phone,err
 	}
 
 	// Generate OTP
 
 	otp, err := utils.GenerateOTP()
 	if err != nil {
-
 		logger.Log.Error(
 			"Failed to generate signup OTP",
 			zap.String("email", email),
 			zap.Error(err),
 		)
 
-		return err
+		return phone,err
 	}
 
 	// Hash password
@@ -191,10 +175,8 @@ func (s *signupService) Signup(
 			zap.Error(err),
 		)
 
-		return err
-	}
-
-
+		return phone,err
+		}
 	pendingSignup := &models.PendingUserSignup{
 		Role:         role,
 		FirstName:    input.FirstName,
@@ -203,7 +185,7 @@ func (s *signupService) Signup(
 		Phone:        phone,
 		Password:     hashedPassword,
 		OTPHash:      otpHash,
-		OTPExpiresAt: time.Now().Add(5 * time.Minute),
+		OTPExpiresAt: time.Now().Add(2 * time.Minute),
 		CreatedAt:    time.Now(),
 	}
 
@@ -217,9 +199,8 @@ func (s *signupService) Signup(
 			zap.Error(err),
 		)
 
-		return err
+		return phone,err
 	}
-
 
 	println("OTP:", otp)
 
@@ -229,5 +210,300 @@ func (s *signupService) Signup(
 		zap.String("role", string(role)),
 	)
 
+	return phone,nil
+}
+
+func (s *signupService) ResendOTP(phone string) error {
+
+    err := s.GenerateAndSendOTP(phone)
+
+    if err != nil {
+        return err
+    }
+    logger.Log.Info(
+        "OTP resent successfully",
+        zap.String("phone", phone),
+        
+    )
+
+    return nil
+}
+
+func (s *signupService) GenerateAndSendOTP(phone string) (error) {
+	pendingUser, err := s.pendingUserRepo.FindByPhone(phone)
+
+	if err != nil {
+
+		logger.Log.Error(
+			"Failed to find pending user by phone",
+			zap.String("phone", phone),
+			zap.Error(err),
+		)
+
+		return err
+	}
+
+	// Generate new OTP
+
+	otp, err := utils.GenerateOTP()
+	if err != nil {
+		logger.Log.Error(
+			"Failed to generate signup OTP",
+			zap.String("phone", phone),
+			zap.Error(err),
+		)
+
+		return err
+	}
+
+	otpHash, err := utils.HashPassword(otp)
+	if err != nil {
+
+		logger.Log.Error(
+			"Failed to hash signup OTP",
+			zap.String("phone", phone),
+			zap.Error(err),
+		)
+
+		return err
+	}
+
+	pendingUser.OTPHash = otpHash
+	pendingUser.OTPExpiresAt = time.Now().Add(2 * time.Minute)
+
+	err = s.pendingUserRepo.Update(pendingUser)
+	println("OTP:", otp)
+
+	logger.Log.Info("Signup pending OTP verification",
+	zap.String("phone", phone),
+	zap.String("role", string(pendingUser.Role)),
+	)
+
 	return nil
+
+}
+func (s *signupService) FindPendingUserByPhone(phone string) (*models.PendingUserSignup,error){
+	pendingUser, err := s.pendingUserRepo.FindByPhone(phone)
+	if err != nil {
+
+		logger.Log.Error(
+			"Failed to find pending user by phone",
+			zap.String("phone", phone),
+			zap.Error(err),
+		)
+
+		return nil,err
+	}
+	return pendingUser,err
+}
+func (s *signupService) ValidateOTP(phone string,otp string) (time.Time, error) {
+
+    pendingUser, err := s.pendingUserRepo.FindByPhone(phone)
+
+    if err != nil {
+        logger.Log.Error(
+            "Failed to find pending user by phone",
+            zap.String("phone", phone),
+            zap.Error(err),
+        )
+
+        return time.Time{}, err
+    }
+
+    if pendingUser == nil {
+        return time.Time{}, errors.New("pending signup not found")
+    }
+
+    // Keep the expiry time so the handler can send it back to UI
+    expiresAt := pendingUser.OTPExpiresAt
+
+    // Check expiry
+    if time.Now().After(expiresAt) {
+
+        logger.Log.Warn(
+            "OTP expired",
+            zap.String("phone", phone),
+        )
+
+        return expiresAt, errors.New("OTP expired")
+    }
+
+    // Compare OTP
+    err = bcrypt.CompareHashAndPassword(
+        []byte(pendingUser.OTPHash),
+        []byte(otp),
+    )
+
+    if err != nil {
+
+        logger.Log.Warn(
+            "Invalid OTP",
+            zap.String("phone", phone),
+        )
+
+        return expiresAt, errors.New("Invalid OTP")
+    }
+
+    logger.Log.Info(
+        "OTP verified successfully",
+        zap.String("phone", phone),
+    )
+
+    return expiresAt, nil
+}
+func (s *signupService) CreateUser(phone string) (*models.User,error) {
+
+	pendingUser, err := s.pendingUserRepo.FindByPhone(phone)
+
+
+    if err != nil {
+        logger.Log.Error(
+            "Failed to fetch signup data",
+            zap.String("phone", phone),
+            zap.Error(err),
+        )
+        return nil,err
+    }
+
+    if pendingUser == nil {
+        return nil,errors.New("pending signup not found")
+    }
+	var userID uint
+	err=database.DB.Transaction(func(tx *gorm.DB) error {
+
+		user := &models.User{
+			Role:     pendingUser.Role,
+			Email:    pendingUser.Email,
+			Phone:    pendingUser.Phone,
+			Password: pendingUser.Password,
+		}
+
+		if err := s.userRepo.Create(tx, user); err != nil {
+			return err
+		}
+			userID = user.UserID
+		if pendingUser.Role == models.RolePatient {
+
+			patient := &models.Patient{
+				UserID:    user.UserID,
+				FirstName: pendingUser.FirstName,
+				LastName:  pendingUser.LastName,
+			}
+			if err := s.patientRepo.CreatePatient(tx, patient); err != nil {
+				return err
+			}
+
+		} else if pendingUser.Role == models.RoleDoctor {
+
+			doctor := &models.Doctor{
+				UserID:    user.UserID,
+				FirstName: pendingUser.FirstName,
+				LastName:  pendingUser.LastName,
+			}
+
+			if err := s.doctorRepo.CreateDoctor(tx, doctor); err != nil {
+				return err
+			}
+		}
+
+		// Remove temporary signup record
+
+		if err = s.pendingUserRepo.Delete(tx, pendingUser.PendingID); err != nil {
+			return err
+		}
+
+		return nil
+
+	})
+
+if err!=nil{
+	return nil,err
+}
+	user, err := s.userRepo.FetchUser(userID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s *signupService) UpdatePhone(oldPhone string,newPhone string) (models.UserRole,string,error) {
+	
+	exists, err := s.userRepo.PhoneExist(newPhone)
+	if err != nil {
+logger.Log.Error("Error occur while changing phone",
+zap.String("oldPhone",oldPhone),
+zap.String("newPhone",newPhone),
+)
+
+		return "","",err
+	}
+
+	if exists {
+		return "","",ErrPhoneAlreadyExists
+	}
+
+	// Find pending user using old phone
+	pendingUser, err := s.pendingUserRepo.FindByPhone(oldPhone)
+
+	if err != nil {
+		return "","",err
+	}
+pendingUser.Phone=newPhone
+	err = s.pendingUserRepo.Update(pendingUser)
+if err != nil {
+	logger.Log.Error(
+        "Error updating pending user phone",
+        zap.String("phone", pendingUser.Phone),
+        zap.String("old phone", oldPhone),
+        
+    )
+        return "","",err
+    }
+	// Generate OTP
+	err = s.GenerateAndSendOTP(pendingUser.Phone)
+    if err != nil {
+		logger.Log.Error(
+        "phone updated. Error while sending otp to new number",
+        zap.String("phone", pendingUser.Phone),
+        
+    )
+        return pendingUser.Role,pendingUser.Phone,err
+    }
+    logger.Log.Info(
+        "OTP resent successfully",
+        zap.String("phone", pendingUser.Phone),
+        
+    )
+return pendingUser.Role,pendingUser.Phone,nil
+
+}
+
+
+func (s *signupService) VerifyOTPAndCreateUser(phone string,otp string) (time.Time, error) {
+
+	// Find pending user
+	pendingUser, err := s.pendingUserRepo.FindByPhone(phone)
+
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	if pendingUser == nil {
+		return time.Time{}, errors.New(
+			"pending user not found",
+		)
+	}
+
+	// Validate OTP
+	otpExpiresAt, err := s.ValidateOTP(phone, otp)
+
+	if err != nil {
+		return otpExpiresAt, err
+	}
+
+
+
+	return otpExpiresAt, nil
 }

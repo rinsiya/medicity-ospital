@@ -32,7 +32,7 @@ func (s *userService) Login(input dto.LoginInput, role string) (*models.User, er
 	)
 
 	// Find user by email or phone
-	user, err := s.repo.FindByEmailOrPhone(input.Username)
+	user, err := s.repo.FindByUsername(input.Username)
 
 	if err != nil {
 		logger.Log.Error("Failed to find user during login",

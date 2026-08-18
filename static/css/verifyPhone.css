@@ -1,0 +1,361 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", Arial, sans-serif;
+    background-color: #ffffff;
+    color: #062e17;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 115px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.logo-plus {
+    color: #006b2c;
+    font-size: 45px;
+    font-weight: 700;
+    line-height: 0;
+    vertical-align: -5px;
+    margin-right: 4px;
+}
+
+.medi {
+    color: #0a5428;
+}
+
+.city {
+    color: #08045b;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content {
+    flex: 1;
+
+    background-color: #f7f9fa;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top: 88px;
+    padding-bottom: 70px;
+}
+
+
+/* =========================
+   INTRODUCTION
+========================= */
+
+.intro {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.intro h1 {
+    color: #003d1c;
+
+    font-size: 25px;
+    line-height: 1.15;
+    font-weight: 600;
+
+    letter-spacing: -0.7px;
+
+    margin-bottom: 13px;
+}
+
+.intro p {
+    color: #6b6b6b;
+
+    font-size: 9px;
+    line-height: 1.6;
+
+    font-weight: 400;
+}
+
+
+/* =========================
+   VERIFICATION CARD
+========================= */
+
+.verification-card {
+    width: 275px;
+    min-height: 256px;
+
+    background-color: #ffffff;
+
+    border-radius: 5px;
+
+    padding: 24px 19px;
+
+    text-align: center;
+
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.verification-card h2 {
+    color: #171717;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+.verification-message {
+    color: #707070;
+
+    font-size: 8px;
+    line-height: 1.55;
+
+    margin-bottom: 14px;
+}
+
+
+/* =========================
+   OTP
+========================= */
+
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+.otp-container input {
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid #d8dddd;
+    border-radius: 4px;
+
+    background-color: #f4f6f6;
+
+    outline: none;
+
+    text-align: center;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #123b22;
+
+    transition: 0.2s ease;
+}
+
+.otp-container input:focus {
+    background-color: #ffffff;
+    border-color: #23834b;
+    box-shadow: 0 0 0 1px rgba(35, 131, 75, 0.15);
+}
+
+
+/* =========================
+   VERIFY BUTTON
+========================= */
+
+.verify-btn {
+    width: 225px;
+    height: 31px;
+
+    border: none;
+    border-radius: 4px;
+
+    background-color: #006b2c;
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    transition: background-color 0.2s ease;
+}
+
+.verify-btn span {
+    font-size: 14px;
+    margin-left: 3px;
+}
+
+.verify-btn:hover {
+    background-color: #005722;
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+.timer {
+    margin-top: 14px;
+
+    color: #505050;
+
+    font-size: 7px;
+}
+
+.timer-icon {
+    font-size: 10px;
+    margin-right: 3px;
+}
+
+.timer strong {
+    font-weight: 500;
+}
+
+
+/* =========================
+   RESEND
+========================= */
+
+.resend {
+    margin-top: 7px;
+
+    color: #6d6d6d;
+
+    font-size: 7px;
+}
+
+.resend button {
+    border: none;
+    background: transparent;
+
+    color: #005d27;
+
+    font-family: inherit;
+    font-size: 7px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.resend button:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   CHANGE NUMBER
+========================= */
+
+.change-number {
+    margin-top: 8px;
+
+    border: none;
+    border-bottom: 1px solid #a9a9a9;
+
+    background: transparent;
+
+    color: #606060;
+
+    font-family: inherit;
+
+    font-size: 7px;
+
+    cursor: pointer;
+}
+
+.change-number:hover {
+    color: #005d27;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    height: 67px;
+
+    background-color: #0d034f;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .header {
+        height: 90px;
+    }
+
+    .main-content {
+        padding-top: 60px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .intro h1 {
+        font-size: 22px;
+    }
+
+    .intro p {
+        font-size: 8px;
+    }
+
+    .intro p br {
+        display: none;
+    }
+
+    .verification-card {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .footer {
+        height: 60px;
+        font-size: 11px;
+        text-align: center;
+    }
+}

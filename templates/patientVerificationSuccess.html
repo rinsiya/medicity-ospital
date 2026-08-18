@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Successful - MediCity</title>
+       <link rel="stylesheet" href="/static/css/styles.css">
+
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <div class="logo">
+            <span class="plus">+</span>
+            <span class="medi">Medi</span><span class="city">City</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="content-area">
+            <div class="card result-card success">
+                <div class="icon-wrap">
+                    <div class="main-icon">✦</div>
+                    <span class="badge one">✚</span>
+                    <span class="badge two">♟</span>
+                </div>
+
+                <h1>Verification Successful</h1>
+ {{if .message}}
+                <div class="error" style="color: brown;">{{.message}}</div>
+                {{end}}
+                <p class="result-text">
+                    Welcome to MediCity,Your profile has been verified.
+                    We are excited to have you join our network of healthcare.
+                    <br>
+                    Let's start your journey with MediCity!
+                </p>
+
+                <a href="/patient/login" class="result-btn">Start &nbsp;➜</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2026 MediCity Hospital. All Rights Reserved.
+    </footer>
+</div>
+</body>
+</html>

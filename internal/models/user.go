@@ -29,8 +29,6 @@ type User struct {
 
 	Password string `gorm:"size:255;not null"`
 
-	PhoneVerified bool `gorm:"default:false"`
-
 	Status UserStatus `gorm:"type:varchar(20);not null;default:'active'"`
 
 	LastLogin *time.Time

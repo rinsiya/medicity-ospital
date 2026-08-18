@@ -15,7 +15,7 @@ patientRepo := repository.NewPatientRepository()
 doctorRepo := repository.NewDoctorRepository()
 	// Service
 	userService := service.NewUserService(userRepo)
-signupService := service.NewSignupService(pendingUserRepo,userRepo)
+signupService := service.NewSignupService(pendingUserRepo,userRepo,patientRepo,doctorRepo)
 patientService := service.NewPatientService(patientRepo)
 doctorService := service.NewDoctorService(doctorRepo)
 
@@ -32,12 +32,29 @@ signupHandler:= handler.NewSignupHandler(signupService)
 	router.POST("/:role/login", userHandler.Login)
 	router.POST("/logout", userHandler.Logout)
 	router.POST("/signup/:role", signupHandler.Signup)
+	
 	router.GET("/:role/verify-otp", signupHandler.ShowOTPPage)
+	router.POST("/verify-otp", signupHandler.ValidateOTP)
+
+	router.GET("/:role/verify-otp-pending", signupHandler.ShowOTPPendingPage)
+router.POST("/resend-otp", signupHandler.ResendOTP)
+router.GET("/change-phone",signupHandler.ChangePhone)
+router.POST("/change-phone",signupHandler.UpdatePhone)
+
+router.GET("/patient/verification-success", signupHandler.PatientVerificationSuccess)
+router.GET("/doctor/verification-success", signupHandler.DoctorVerificationSuccess)
+router.GET("/patient/login", userHandler.PatientLogin)
+router.GET("/doctor/login", userHandler.DoctorLogin)
+router.GET("/admin/login", userHandler.AdminLogin)
+
+
+
+
+
+
+
 	// Patient specific Routes
     router.GET("/patient/signup", patientHandler.PatientSignup)
     router.GET("/doctor/signup", doctorHandler.DoctorSignup)
-		
-	router.GET("/patient/login", userHandler.PatientLogin)
-	router.GET("/doctor/login", userHandler.DoctorLogin)
-	router.GET("/admin/login", userHandler.AdminLogin)
+
 }

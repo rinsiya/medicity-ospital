@@ -11,7 +11,7 @@ import (
 
 type PatientRepository interface {
 	//FindByEmailOrPhone(username string) (*models.User, error)
-	//Create(user *models.User) error
+	CreatePatient(tx *gorm.DB,patient *models.Patient) error
 }
 
   type patientRepository struct{}
@@ -53,27 +53,9 @@ func (r *patientRepository) PhoneExists(phone string) (bool, error) {
 	return count > 0, nil
 }
 
-func (r *userRepository) CreatePatient(
-	user *models.User,
-	patient *models.Patient,
-) error {
-
-	return database.DB.Transaction(func(tx *gorm.DB) error {
-
-		// Create user first
-		if err := tx.Create(user).Error; err != nil {
-			return err
-		}
-
-		// Assign generated UserID to patient
-		patient.UserID = user.UserID
-
+func (r *patientRepository) CreatePatient(tx *gorm.DB,patient *models.Patient) error {
 		// Create patient
-		if err := tx.Create(patient).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
+		return tx.Create(patient).Error;
+			
 }
 
